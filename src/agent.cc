@@ -17,7 +17,6 @@ agent_c::agent_c ()
   curl_global_init (CURL_GLOBAL_DEFAULT);
 }
 
-
 agent_c::~agent_c () {
   curl_global_cleanup ();
 }
@@ -81,7 +80,7 @@ agent_c::idfetcher_execute (
   url = std::string (AGENT_IDFETCHER_URI_PREFIX + station.get_name() +
     AGENT_IDFETCHER_URI_SUFFIX);
 
-  status = agent_c::curl_retrieve (url, &data->buffer);
+  status = this->curl_retrieve (url, &data->buffer);
   return status;
 }
 
@@ -105,6 +104,6 @@ agent_c::datafetcher_execute (
   }
   url += std::to_string (station.get_number ());
 
-  status = agent_c::curl_retrieve (url, &data->buffer);
+  status = this->curl_retrieve (url, &data->buffer);
   return status;
 }
