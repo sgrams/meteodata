@@ -34,3 +34,6 @@
 # Build directory
 build/
 !build/build.sh
+
+# ctags
+tags
