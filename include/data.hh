@@ -16,5 +16,7 @@ class data_c {
   public:
   std::string buffer;
   size_t      size;
+
+  void clear ();
 };
 #endif // METEODATA_DATA_H

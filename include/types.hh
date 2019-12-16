@@ -51,7 +51,7 @@ typedef enum datatype {
 typedef enum dataflavour {
   // only meteo & hydro supported by pogodynka
   meteo = 0x00,
-  hydro = 0x01
+  hydro = 0x01,
 } dataflavour_t;
 
 typedef enum command {

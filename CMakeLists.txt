@@ -18,6 +18,9 @@ include_directories(${LIBCURL_INCLUDE_DIRS})
 link_directories(${LIBCURL_LIBRARY_DIRS})
 add_definitions(${LIBCURL_CFLAGS_OTHER})
 
+# nlohmann/json
+find_package (nlohmann_json REQUIRED)
+
 ## build flags
 set (CMAKE_CXX_FLAGS
   "${CMAKE_CXX_FLAGS} -Wall -pedantic"
@@ -30,6 +33,7 @@ set (SRC_FILES
   src/commandparser.cc
   src/data.cc
   src/main.cc
+  src/parser.cc
   src/station.cc
 
   # *.hh, *.h
@@ -37,6 +41,7 @@ set (SRC_FILES
   include/commandparser.hh
   include/data.hh
   include/helper.hh
+  include/parser.hh
   include/station.hh
   include/types.hh
   )
@@ -44,6 +49,7 @@ set (SRC_FILES
 ## lib
 set (LIBS
   ${LIBCURL_LIBRARIES}
+  nlohmann_json::nlohmann_json
   )
 
 ## executable

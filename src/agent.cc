@@ -72,7 +72,7 @@ agent_c::idfetcher_execute (
   int status = 0;
   std::string url;
 
-  if (data == NULL) {
+  if (data == NULL || station.get_name ().length () <= 0) {
     return -1;
   }
 
