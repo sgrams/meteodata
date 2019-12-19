@@ -6,3 +6,80 @@
  * See ../LICENSE for license information
  */
 #include "../include/commandparser.hh"
+#include <iostream> // debug
+commandparser_c::commandparser_c (
+  int argc,
+  char *argv[]
+  )
+{
+  this->argc = argc;
+  this->argv = argv;
+}
+
+char **
+commandparser_c::get_argv (
+  void
+  )
+{
+  return this->argv;
+}
+
+int
+commandparser_c::get_commands (
+  std::vector<std::pair<command_t, std::string>> &command_vec
+  )
+{
+  int  status            = 0;
+  int  option_index      = 0;
+  bool location_provided = false;
+  char c;
+
+  static struct option long_options[] =
+  {
+    {"help",     no_argument,       0, 'h'},
+    {"verbose",  no_argument,       0, 'v'},
+    {"date",     required_argument, 0, 'd'},
+    {"location", required_argument, 0, 'l'},
+    {"type",     required_argument, 0, 't'},
+    {0, 0, 0, 0},
+  };
+
+  if (argc == 1) {
+    status = 1; // no commands provided
+    return status;
+  }
+
+  while ((c = getopt_long (this->argc, this->get_argv (), "hvl:d:t:", long_options, &option_index)) != -1)
+  {
+    switch (c) {
+      // help
+      case 'h':
+      return status = 1; // help
+
+      // verbose
+      case 'v':
+      command_vec.push_back(std::make_pair(verbose, ""));
+      break;
+
+      // location
+      case 'l':
+      location_provided = true;
+      command_vec.push_back (std::make_pair (location, std::string (optarg)));
+			break;
+
+      // date
+      case 'd':
+      break;
+
+      // datatype
+      case 't':
+
+      break;
+    }
+  }
+
+  if (!location_provided) {
+    return 2;
+  }
+  return status;
+}

@@ -44,11 +44,10 @@ agent_c::curl_retrieve (
   std::string *buffer
   )
 {
-  long status = 0;
-
-  CURL *conn = curl_easy_init ();
+  CURLcode status;
+  CURL     *conn = curl_easy_init ();
   if (conn == NULL) {
-    status = -1;
+    return -1;
   }
   curl_easy_setopt (conn, CURLOPT_URL, url.c_str ());
   curl_easy_setopt (conn, CURLOPT_TIMEOUT, AGENT_TIMEOUT);
@@ -56,11 +55,10 @@ agent_c::curl_retrieve (
   curl_easy_setopt (conn, CURLOPT_WRITEDATA, buffer);
   curl_easy_setopt (conn, CURLOPT_USERAGENT, AGENT_USERAGENT);
 
-  curl_easy_perform (conn); // fetch data
-  curl_easy_getinfo (conn, CURLINFO_RESPONSE_CODE, &status); // fetch status code
+  status = curl_easy_perform (conn); // fetch data
   curl_easy_cleanup (conn); // cleanup
 
-  return status == HTTP_OK ? 0 : status;
+  return (status == CURLE_OK) ? 0 : status;
 }
 
 int

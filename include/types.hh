@@ -55,12 +55,11 @@ typedef enum dataflavour {
 } dataflavour_t;
 
 typedef enum command {
-  empty   = 0x00,
-  help    = 0x01,
-  verbose = 0x02,
-  station = 0x03,
-  date    = 0x04,
-  type    = 0x05,
-  json    = 0x06
+  verbose  = 0x01,
+  location = 0x02,
+  date     = 0x03,
+  type     = 0x04,
+  flavour  = 0x05
+  //json     = 0x06
 } command_t;
 #endif // METEODATA_TYPES_H

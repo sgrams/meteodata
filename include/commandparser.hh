@@ -9,7 +9,11 @@
 #define METEODATA_COMMANDPARSER_H
 #include <stdexcept>
 #include <cstdint>
+#include <getopt.h>
 #include <vector>
+#include <utility>
+#include <string>
+#include "helper.hh"
 #include "types.hh"
 
 class commandparser_c {
@@ -28,6 +32,6 @@ class commandparser_c {
   char **get_argv (void);
 
   // parser methods
-  std::vector<command_t> get_commands (void);
+  int get_commands (std::vector<std::pair<command_t, std::string>> &command_vec);
 };
 #endif // METEODATA_COMMANDPARSER_H

@@ -32,6 +32,7 @@ set (SRC_FILES
   src/agent.cc
   src/commandparser.cc
   src/data.cc
+  src/helper.cc
   src/main.cc
   src/parser.cc
   src/station.cc

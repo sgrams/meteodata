@@ -6,26 +6,33 @@
  * See ../LICENSE for license information
  */
 
-#include <iostream>
 #include <string>
+#include <vector>
+#include <utility>
 #include "../include/agent.hh"
 #include "../include/data.hh"
+#include "../include/helper.hh"
 #include "../include/station.hh"
 #include "../include/parser.hh"
+#include "../include/commandparser.hh"
 
 int
-main (int argc, char *argv[]) {
-  int status = 0;
+main (
+  int argc,
+  char *argv[]
+  )
+{
+  int  status                  = 0;
+  bool verbose_flag            = false;
 
-  agent_c   agent;
-  parser_c  *parser   = nullptr;
+  commandparser_c commparser  = commandparser_c (argc, argv);
+  agent_c         *agent      = nullptr;
+  station_c       *station    = nullptr;
+  parser_c        *parser     = nullptr;
+  data_c          *data       = nullptr;
 
-  station_c station;
-  data_c    *data     = nullptr;
-
-  std::string name = "LIDZBARK";
-
-  //
+  std::vector<std::pair<command_t, std::string>> command_vec;
+  /*
   data = new data_c;
   station.set_name (name);
   try {
@@ -33,15 +40,41 @@ main (int argc, char *argv[]) {
   } catch (const std::exception& e) {
     std::cerr << argv[0] << ": Unable to create parser: " << e.what () << ". Exiting...\n";
   }
-  parser->get_measurement (temp_auto);
-
-  if (data != nullptr) {
-    delete data;
+  */
+  status = commparser.get_commands (command_vec);
+  if (status < 0) {
+    helper_ns::error ("please double check command-line parameters");
+    goto main_CLEANUP;
+  } else if (status > 0) {
+    helper_ns::print_help ();
+    goto main_CLEANUP;
   }
 
-  if (parser != nullptr) {
-    delete parser;
+  for (auto it = command_vec.begin (); it != command_vec.end (); ++it)
+  {
+    switch (it->first) {
+      case verbose:
+      verbose_flag = true;
+      helper_ns::verbose ("verbose mode enabled", verbose_flag);
+      break;
+
+      case location:
+      helper_ns::verbose (it->second + " location selected", verbose_flag);
+      break;
+
+      case date:
+      break;
+
+      case type:
+      break;
+    }
   }
+
+main_CLEANUP:
+  if (data != nullptr)       { delete data; }
+  if (parser != nullptr)     { delete parser; }
+  if (station != nullptr)    { delete station; }
+  if (agent != nullptr)      { delete agent; }
 
   return status;
 }
