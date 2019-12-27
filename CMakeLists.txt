@@ -5,6 +5,10 @@
 ## CMakeLists.txt
 ## See LICENSE for license information
 ##
+
+###
+## source code
+##
 cmake_minimum_required (VERSION 3.10)
 set (CMAKE_CXX_STANDARD 17)
 project (meteodata)
@@ -12,53 +16,5 @@ project (meteodata)
 # pkg-config
 find_package (PkgConfig REQUIRED)
 
-# libcurl
-pkg_check_modules(LIBCURL REQUIRED libcurl)
-include_directories(${LIBCURL_INCLUDE_DIRS})
-link_directories(${LIBCURL_LIBRARY_DIRS})
-add_definitions(${LIBCURL_CFLAGS_OTHER})
-
-# nlohmann/json
-find_package (nlohmann_json REQUIRED)
-
-## build flags
-set (CMAKE_CXX_FLAGS
-  "${CMAKE_CXX_FLAGS} -Wall -pedantic"
-  )
-
-## src
-set (SRC_FILES
-  # *.cc, *.c
-  src/agent.cc
-  src/commandparser.cc
-  src/data.cc
-  src/helper.cc
-  src/main.cc
-  src/parser.cc
-  src/station.cc
-
-  # *.hh, *.h
-  include/agent.hh
-  include/commandparser.hh
-  include/data.hh
-  include/helper.hh
-  include/parser.hh
-  include/station.hh
-  include/types.hh
-  )
-
-## lib
-set (LIBS
-  ${LIBCURL_LIBRARIES}
-  nlohmann_json::nlohmann_json
-  )
-
-## executable
-add_executable (
-  meteodata
-  ${SRC_FILES}
-  )
-
-target_link_libraries (
-  meteodata
-  ${LIBS})
+add_subdirectory (src)   ## bin
+#add_subdirectory (test)  ## unit tests

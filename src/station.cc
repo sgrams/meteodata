@@ -5,7 +5,6 @@
  * src/station.cc
  * See ../LICENSE for license information
  */
-#include <stdexcept>
 #include "../include/station.hh"
 
 std::string
@@ -43,19 +42,4 @@ station_c::set_number (
   if (number > 0) {
     this->number = number;
   }
-}
-
-dataflavour_t
-station_c::get_flavour (
-  )
-{
-  return this->flavour;
-}
-
-void
-station_c::set_flavour (
-  dataflavour_t flavour
-  )
-{
-  this->flavour = flavour;
 }

@@ -5,11 +5,6 @@
  * src/agent.cc
  * See ../LICENSE for license information
  */
-#include <iostream> // debug
-#include <string>
-#include <memory>
-#include <stdexcept>
-#include <curl/curl.h>
 #include "../include/agent.hh"
 
 agent_c::agent_c ()
@@ -96,10 +91,7 @@ agent_c::datafetcher_execute (
   }
 
   // build an url
-  url = std::string (AGENT_DATAFETCHER_METEO_URI);
-  if (station.get_flavour () == hydro) {
-    url = std::string (AGENT_DATAFETCHER_HYDRO_URI);
-  }
+  url =  std::string (AGENT_DATAFETCHER_METEO_URI);
   url += std::to_string (station.get_number ());
 
   status = this->curl_retrieve (url, &data->buffer);

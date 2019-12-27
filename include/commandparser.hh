@@ -13,6 +13,7 @@
 #include <vector>
 #include <utility>
 #include <string>
+#include <unordered_map>
 #include "helper.hh"
 #include "types.hh"
 
@@ -33,5 +34,6 @@ class commandparser_c {
 
   // parser methods
   int get_commands (std::vector<std::pair<command_t, std::string>> &command_vec);
+  void get_enum_map (std::unordered_map <std::string, datatype_t> &enum_map);
 };
 #endif // METEODATA_COMMANDPARSER_H

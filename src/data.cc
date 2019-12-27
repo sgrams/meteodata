@@ -6,6 +6,7 @@
  * See ../LICENSE for license information
  */
 #include "../include/data.hh"
+
 void
 data_c::clear ()
 {

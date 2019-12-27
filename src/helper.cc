@@ -6,6 +6,7 @@
  * See ../LICENSE for license information
  */
 #include "../include/helper.hh"
+
 void
 helper_ns::print_help (
   void
@@ -43,11 +44,6 @@ helper_ns::print_help (
     << "    wind.vel.max     [2880 min]; telemetry, max wind gusts velocity per 10 minutes\n"\
     << "    wind.vel.tel.max [2880 min]; telemetry, max avg wind velocity per 10 minutes\n" \
     << "    wind.vel.obs.max [2880 min]; observer, max avg wind velocity per 10 minutes\n" \
-    << "  hydro:\n" \
-    << "    hydro.state.auto [4320 min]; telemetry, water state per 1 hour\n" \
-    << "    hydro.state.obs  [4320 min]; observer, water state per 1 hour\n" \
-    << "    hydro.disc.auto  [4320 min]; telemetry, water discharge per 1 hour\n" \
-    << "    hydro.disc.obs   [4320 min]; observer, water discharge per 1 hour\n" \
     << "\n" \
     << "Datetime presented in UTC.\n" \
     << "Example call:\n" \
@@ -72,4 +68,12 @@ helper_ns::error (
   )
 {
   std::cerr << "error: " << msg << "\n";
+}
+
+void
+helper_ns::message (
+  std::string msg
+  )
+{
+  std::cout << msg << "\n";
 }

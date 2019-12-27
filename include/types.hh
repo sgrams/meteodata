@@ -12,7 +12,6 @@ typedef enum datatype {
   // general
   info             = 0x00,
 
-  /* meteo flavour */
   // precipitation
   precip_cur       = 0x10,
   precip_10min     = 0x11,
@@ -37,29 +36,13 @@ typedef enum datatype {
 
   wind_vel_tel_max = 0x35,
   wind_vel_obs_max = 0x36,
-
-  /* hydro flavour */
-  // water state
-  state_auto       = 0xF0,
-  state_obs        = 0xF1,
-
-  // water discharge
-  discharge_auto   = 0xF2,
-  discharge_obs    = 0xF3
 } datatype_t;
-
-typedef enum dataflavour {
-  // only meteo & hydro supported by pogodynka
-  meteo = 0x00,
-  hydro = 0x01,
-} dataflavour_t;
 
 typedef enum command {
   verbose  = 0x01,
   location = 0x02,
   date     = 0x03,
   type     = 0x04,
-  flavour  = 0x05
-  //json     = 0x06
+  //json     = 0x05
 } command_t;
 #endif // METEODATA_TYPES_H

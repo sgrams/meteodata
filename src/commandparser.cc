@@ -6,7 +6,7 @@
  * See ../LICENSE for license information
  */
 #include "../include/commandparser.hh"
-#include <iostream> // debug
+
 commandparser_c::commandparser_c (
   int argc,
   char *argv[]
@@ -24,6 +24,7 @@ commandparser_c::get_argv (
   return this->argv;
 }
 
+// validation shall be handled externally
 int
 commandparser_c::get_commands (
   std::vector<std::pair<command_t, std::string>> &command_vec
@@ -67,13 +68,14 @@ commandparser_c::get_commands (
       command_vec.push_back (std::make_pair (location, std::string (optarg)));
 			break;
 
-      // date
+      // datetime
       case 'd':
+      command_vec.push_back (std::make_pair (date, std::string (optarg)));
       break;
 
       // datatype
       case 't':
-
+      command_vec.push_back (std::make_pair (type, std::string (optarg)));
       break;
     }
   }
@@ -82,4 +84,35 @@ commandparser_c::get_commands (
     return 2;
   }
   return status;
+}
+
+void
+commandparser_c::get_enum_map (
+  std::unordered_map <std::string, datatype_t> &enum_map
+  )
+{
+  // general
+  enum_map["info"]             = info;
+  // precipitation
+  enum_map["precip.cur"]       = precip_cur;
+  enum_map["precip.10min"]     = precip_10min;
+  enum_map["precip.hourly"]    = precip_hourly;
+  enum_map["precip.daily"]     = precip_daily;
+
+  // temperature
+  enum_map["temp.auto"]        = temp_auto;
+  enum_map["temp.obs"]         = temp_obs;
+  enum_map["temp.auto.min"]    = temp_auto_min;
+  enum_map["temp.auto.max"]    = temp_auto_max;
+  enum_map["temp.obs.min"]     = temp_obs_min;
+  enum_map["temp.obs.max"]     = temp_obs_max;
+
+  // wind
+  enum_map["wind.dir.tel"]     = wind_dir_tel;
+  enum_map["wind.dir.obs"]     = wind_dir_obs;
+  enum_map["wind.vel.tel"]     = wind_vel_tel;
+  enum_map["wind.vel.obs"]     = wind_vel_obs;
+  enum_map["wind.vel.max"]     = wind_vel_max;
+  enum_map["wind.vel.tel.max"] = wind_vel_tel_max;
+  enum_map["wind.vel.obs.max"] = wind_vel_obs_max;
 }

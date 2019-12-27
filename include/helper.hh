@@ -21,5 +21,6 @@ namespace helper_ns {
   void print_help (void);
   void verbose    (std::string msg, bool verbose_flag);
   void error      (std::string msg);
+  void message    (std::string msg);
 }
 #endif // METEODATA_HELPER_H

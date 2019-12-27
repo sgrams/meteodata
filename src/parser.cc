@@ -6,7 +6,6 @@
  * See ../LICENSE for license information
  */
 #include "../include/parser.hh"
-#include <iostream>
 
 parser_c::parser_c (
   agent_c *agent,
@@ -52,20 +51,9 @@ parser_c::match_station_number () {
   }
   auto id_json = json_c::parse (this->data->buffer);
 
-  std::string flavour_string;
-  switch (this->station->get_flavour ())
-  {
-    case meteo:
-    flavour_string = "meteo";
-    break;
-    case hydro:
-    flavour_string = "hydro";
-    break;
-  }
-
   for (auto it = id_json.begin (); it != id_json.end (); ++it)
   {
-    if ((*it)["c"] == flavour_string) {
+    if ((*it)["c"] == FLAVOUR_METEO_STRING) {
       std::string str_id   = (*it)["id"];
       std::string str_name = (*it)["n"];
 
@@ -82,86 +70,112 @@ parser_c::match_station_number () {
   return 0;
 }
 
+// TODO: finish parsing for precip & wind types
 std::string
 parser_c::get_measurement (
   datatype_t  datatype,
-  std::string date
+  time_t      datetime
   )
 {
-  dataflavour_t flavour = this->station->get_flavour ();
-  std::string   retval;
-  json_c        tmp_json;
+  std::string      retval;
+  json_c::iterator json_it;
+  json_c           json_tmp;
 
-  switch (flavour) {
-
-  }
+  float tmp_min = 0;
+  float tmp_max = 0;
+  std::string tmp_date;
+  this->json = json_c::parse (this->data->buffer);
 
   switch (datatype) {
     // precipitation
     case precip_cur:
-    goto GET_MEASUREMENT_PRECIP;
+      retval += this->json[PATH_PRECIP_STATE];
+      break;
     case precip_10min:
-    goto GET_MEASUREMENT_PRECIP;
+      goto GET_UNIT_FOR_PRECIP;
     case precip_hourly:
-    goto GET_MEASUREMENT_PRECIP;
+      goto GET_UNIT_FOR_PRECIP;
     case precip_daily:
-GET_MEASUREMENT_PRECIP:
-    retval += "mm";
-    break;
+GET_UNIT_FOR_PRECIP:
+      retval += "mm";
+      break;
 
     // temperature
     case temp_auto:
-    goto GET_MEASUREMENT_TEMP;
+      json_tmp = ((json_c)this->json[PATH_TEMP_AUTO_REC]);
+      json_it  = json_tmp.end () - 1;
+      retval   += (*json_it)["value"].dump ();
+      goto GET_UNIT_FOR_TEMP;
     case temp_obs:
-    goto GET_MEASUREMENT_TEMP;
+      json_tmp = ((json_c)this->json[PATH_TEMP_OBS_REC]);
+      json_it  = json_tmp.end () - 1;
+      retval   += (*json_it)["value"].dump ();
+      goto GET_UNIT_FOR_TEMP;
     case temp_auto_min:
-    goto GET_MEASUREMENT_TEMP;
+      json_tmp = ((json_c)this->json[PATH_TEMP_AUTO_REC]);
+      json_it  = json_tmp.begin ();
+      tmp_min  = std::atof ((*json_it)["value"].dump ().c_str ());
+      tmp_date = (*json_it)["date"].dump();
+
+      for (json_it = json_tmp.begin (); json_it < json_tmp.end (); ++json_it)
+      {
+        if (std::atof ((*json_it)["value"].dump ().c_str ()) <= tmp_min) {
+          tmp_min  = std::atof ((*json_it)["value"].dump ().c_str ());
+          tmp_date = (*json_it)["date"].dump();
+        }
+      }
+      retval += std::to_string(std::round(tmp_min * 10) / 10);
+      retval += UNIT_TEMPERATURE;
+      retval += " at ";
+      retval += tmp_date;
+      break;
     case temp_auto_max:
-    goto GET_MEASUREMENT_TEMP;
+      json_tmp = ((json_c)this->json[PATH_TEMP_AUTO_REC]);
+      json_it  = json_tmp.begin ();
+      tmp_max  = std::atof ((*json_it)["value"].dump ().c_str ());
+      tmp_date = (*json_it)["date"].dump();
+
+      for (json_it = json_tmp.begin (); json_it < json_tmp.end (); ++json_it)
+      {
+        if (std::atof ((*json_it)["value"].dump ().c_str ()) >= tmp_max) {
+          tmp_max  = std::atof ((*json_it)["value"].dump ().c_str ());
+          tmp_date = (*json_it)["date"].dump();
+        }
+      }
+      retval += std::to_string(std::round(tmp_max * 10) / 10);
+      retval += UNIT_TEMPERATURE;
+      retval += " at ";
+      retval += tmp_date;
+      break;
     case temp_obs_min:
-    goto GET_MEASUREMENT_TEMP;
+      goto GET_UNIT_FOR_TEMP;
     case temp_obs_max:
-GET_MEASUREMENT_TEMP:
+GET_UNIT_FOR_TEMP:
     retval += "°C";
     break;
 
     // wind
     case wind_dir_tel:
-    goto GET_MEASUREMENT_WIND;
+      goto GET_UNIT_FOR_WIND;
     case wind_dir_obs:
-    goto GET_MEASUREMENT_WIND;
+      goto GET_UNIT_FOR_WIND;
     case wind_vel_tel:
-    goto GET_MEASUREMENT_WIND;
+      goto GET_UNIT_FOR_WIND;
     case wind_vel_obs:
-    goto GET_MEASUREMENT_WIND;
+      goto GET_UNIT_FOR_WIND;
     case wind_vel_max:
-    goto GET_MEASUREMENT_WIND;
+      goto GET_UNIT_FOR_WIND;
     case wind_vel_tel_max:
-    goto GET_MEASUREMENT_WIND;
+      goto GET_UNIT_FOR_WIND;
     case wind_vel_obs_max:
-GET_MEASUREMENT_WIND:
-    retval += "m/s";
-    break;
-
-    // water state
-    case state_auto:
-    goto GET_MEASUREMENT_WATER_STATE;
-    case state_obs:
-    retval += "mm";
-GET_MEASUREMENT_WATER_STATE:
-    break;
-
-    // water discharge
-    case discharge_auto:
-    goto GET_MEASUREMENT_WATER_DISC;
-    case discharge_obs:
-GET_MEASUREMENT_WATER_DISC:
-    retval += "m³/s";
-    break;
+GET_UNIT_FOR_WIND:
+      retval += "m/s";
+      break;
 
     // other
     case info:
-    break;
+      break;
   }
+
   return retval;
 }
