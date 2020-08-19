@@ -101,8 +101,21 @@ main (
 
       try {
         sf->find_station (location);
-        sf->fill_station_data ();
+      } catch (...) {
+        helper.error ("unable to find the " + location + " location");
+        delete sf;
+        continue;
+      }
 
+      try {
+        sf->fill_station_data ();
+      } catch (...) {
+        helper.error ("unable to fill the data for " + location + " location");
+        delete sf;
+        continue;
+      }
+
+      try {
         for (auto &datatype: meteo_datatype_vec)
         {
           helper.verbose (

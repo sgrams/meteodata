@@ -32,11 +32,7 @@ station_facade_c::find_station (std::string name) {
 
 void
 station_facade_c::fill_station_data () {
-  try {
-    this->strategy->fill_station_data (this->station, &this->json, this->agent, this->data);
-  } catch (...) {
-    std::cerr << "Unable to fill station with data!" << std::endl;
-  }
+  this->strategy->fill_station_data (this->station, &this->json, this->agent, this->data);
 }
 
 station_c *
