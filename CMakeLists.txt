@@ -16,5 +16,8 @@ project (meteodata)
 # pkg-config
 find_package (PkgConfig REQUIRED)
 
+# output directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
 add_subdirectory (src)   ## bin
 #add_subdirectory (test)  ## unit tests

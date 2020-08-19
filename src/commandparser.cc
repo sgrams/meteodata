@@ -24,7 +24,6 @@ commandparser_c::get_argv (
   return this->argv;
 }
 
-// validation shall be handled externally
 int
 commandparser_c::get_commands (
   std::vector<std::pair<command_t, std::string>> &command_vec
@@ -69,6 +68,7 @@ commandparser_c::get_commands (
 			break;
 
       // datetime
+      // TODO: add datetime selection support
       case 'd':
       command_vec.push_back (std::make_pair (date, std::string (optarg)));
       break;
@@ -87,32 +87,19 @@ commandparser_c::get_commands (
 }
 
 void
-commandparser_c::get_enum_map (
-  std::unordered_map <std::string, datatype_t> &enum_map
+commandparser_c::get_meteo_enum_map (
+  std::unordered_map <std::string, meteo_datatype_t> &enum_map
   )
 {
-  // general
-  enum_map["info"]             = info;
-  // precipitation
-  enum_map["precip.cur"]       = precip_cur;
-  enum_map["precip.10min"]     = precip_10min;
-  enum_map["precip.hourly"]    = precip_hourly;
-  enum_map["precip.daily"]     = precip_daily;
+  enum_map["temp"] = temp;
+  enum_map["temp_kelvin"] = temp_kelvin;
+  enum_map["temp_fahrenheit"] = temp_fahrenheit;
+}
 
-  // temperature
-  enum_map["temp.auto"]        = temp_auto;
-  enum_map["temp.obs"]         = temp_obs;
-  enum_map["temp.auto.min"]    = temp_auto_min;
-  enum_map["temp.auto.max"]    = temp_auto_max;
-  enum_map["temp.obs.min"]     = temp_obs_min;
-  enum_map["temp.obs.max"]     = temp_obs_max;
-
-  // wind
-  enum_map["wind.dir.tel"]     = wind_dir_tel;
-  enum_map["wind.dir.obs"]     = wind_dir_obs;
-  enum_map["wind.vel.tel"]     = wind_vel_tel;
-  enum_map["wind.vel.obs"]     = wind_vel_obs;
-  enum_map["wind.vel.max"]     = wind_vel_max;
-  enum_map["wind.vel.tel.max"] = wind_vel_tel_max;
-  enum_map["wind.vel.obs.max"] = wind_vel_obs_max;
+void
+commandparser_c::get_hydro_enum_map (
+  std::unordered_map <std::string, hydro_datatype_t> &enum_map
+  )
+{
+  enum_map["level"] = level;
 }

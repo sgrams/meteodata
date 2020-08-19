@@ -28,7 +28,7 @@ set (SRC_FILES
   data.cc
   helper.cc
   main.cc
-  parser.cc
+  facade.cc
   station.cc
 
   # *.hh, *.h
@@ -36,7 +36,7 @@ set (SRC_FILES
   ../include/commandparser.hh
   ../include/data.hh
   ../include/helper.hh
-  ../include/parser.hh
+  ../include/facade.hh
   ../include/station.hh
   ../include/types.hh
   )

@@ -19,21 +19,23 @@
 
 class commandparser_c {
   private:
-  int               argc;
-  char              **argv;
-  std::vector<command_t> commands;
+    int                     argc;
+    char                    **argv;
+    std::vector<command_t>  commands;
 
   public:
-  // constructors
-  commandparser_c (int argc, char **argv);
+    // constructors
+    commandparser_c (int argc, char **argv);
 
-  void set_argc   (int argc);
-  int  get_argc   (void);
-  void set_argv   (char **argv);
-  char **get_argv (void);
+    // methods
+    void set_argc (int argc);
+    int  get_argc ();
+    void set_argv (char **argv);
+    char **get_argv ();
 
-  // parser methods
-  int get_commands (std::vector<std::pair<command_t, std::string>> &command_vec);
-  void get_enum_map (std::unordered_map <std::string, datatype_t> &enum_map);
+    // parser methods
+    int  get_commands (std::vector<std::pair<command_t, std::string>> &command_vec);
+    void get_meteo_enum_map (std::unordered_map <std::string, meteo_datatype_t> &enum_map);
+    void get_hydro_enum_map (std::unordered_map <std::string, hydro_datatype_t> &enum_map);
 };
 #endif // METEODATA_COMMANDPARSER_H

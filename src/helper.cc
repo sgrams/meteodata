@@ -6,9 +6,46 @@
  * See ../LICENSE for license information
  */
 #include "../include/helper.hh"
+#include "../include/types.hh"
+
+std::string
+helper_c::extract_str_from_meteo_enum_map (
+  std::unordered_map <std::string, meteo_datatype_t> &enum_map,
+  meteo_datatype_t &value
+  )
+{
+  auto const it = std::find_if (enum_map.begin (), enum_map.end (),
+    [&value](const std::pair<std::string, meteo_datatype_t> &p) {
+      return p.second == value;
+    });
+
+  if (it == enum_map.end ()) {
+    return std::string ("");
+  }
+
+  return std::string (it->first);
+}
+
+std::string
+helper_c::extract_str_from_hydro_enum_map (
+  std::unordered_map <std::string, hydro_datatype_t> &enum_map,
+  hydro_datatype_t &value
+  )
+{
+  auto const it = std::find_if (enum_map.begin (), enum_map.end (),
+    [&value](const std::pair<std::string, hydro_datatype_t> &p) {
+      return p.second == value;
+    });
+
+  if (it == enum_map.end ()) {
+    return std::string ("");
+  }
+
+  return std::string (it->first);
+}
 
 void
-helper_ns::print_help (
+helper_c::print_help (
   void
   )
 {
@@ -19,51 +56,31 @@ helper_ns::print_help (
     << "  -h  --help     print usage\n" \
     << "  -v  --verbose  set verbose mode\n" \
     << "  -l  --location set location [REQUIRED]\n" \
-    << "  -d  --date     set date\n" \
-    << "  -t  --type     set datatype\n" \
+    << "  -t  --type     set datatype [REQUIRED]\n" \
 
-    << "List of available datatypes: [data for last ... min]\n" \
-    << "  info [n/a]; general information\n" \
-    << "  precipitation:\n"
-    << "    precip.cur    [0     min]; telemetry, current precipitation\n" \
-    << "    precip.10min  [60    min]; telemetry, precipitation for last 10 minutes\n" \
-    << "    precip.hourly [2880  min]; telemetry, precipitation for last hour\n" \
-    << "    precip.daily  [10080 min]; telemetry, precipitation for last 24 hours\n" \
-    << "  temperature:\n" \
-    << "    temp.auto     [2880 min]; telemetry, temperature\n" \
-    << "    temp.obs      [2880 min]; observer, temperature\n" \
-    << "    temp.auto.min [2880 min]; telemetry, min temperature\n" \
-    << "    temp.auto.max [2880 min]; telemetry, max temperature\n" \
-    << "    temp.obs.min  [2880 min]; observer, min temperature\n" \
-    << "    temp.obs.max  [2880 min]; observer, max temperature\n" \
-    << "  wind:\n" \
-    << "    wind.dir.tel     [2880 min]; telemetry, wind direction per 10 minutes\n" \
-    << "    wind.dir.obs     [2880 min]; observer, wind direction per 1 hour\n" \
-    << "    wind.vel.tel     [2880 min]; telemetry, wind velocity per 10 minutes\n"\
-    << "    wind.vel.obs     [2880 min]; observer, wind velocity per 1 hour\n"\
-    << "    wind.vel.max     [2880 min]; telemetry, max wind gusts velocity per 10 minutes\n"\
-    << "    wind.vel.tel.max [2880 min]; telemetry, max avg wind velocity per 10 minutes\n" \
-    << "    wind.vel.obs.max [2880 min]; observer, max avg wind velocity per 10 minutes\n" \
-    << "\n" \
+    << "List of available datatypes:\n" \
+    << "  - temp  (temperature per 10min, 24h)\n" \
+    << "    temp_fahrenheit\n" \
+    << "    temp_kelvin\n" \
+    << "  - level (water level per 1hr, 3 days)\n" \
     << "Datetime presented in UTC.\n" \
     << "Example call:\n" \
-    << "$ meteodata -l Warszawa -t temp.auto -d 20:00\n" \
+    << "$ meteodata -l Warszawa -t temp\n" \
     << "Zrodlem pochodzenia danych jest Instytut Meteorologii i Gospodarki Wodnej - Panstwowy Instytut Badawczy\n";
 }
 
 void
-helper_ns::verbose (
-  std::string msg,
-  bool verbose_flag
+helper_c::verbose (
+  std::string msg
   )
 {
-  if (verbose_flag) {
+  if (this->verbose_flag) {
     std::cout << "verbose: " << msg << "\n";
   }
 }
 
 void
-helper_ns::error (
+helper_c::error (
   std::string msg
   )
 {
@@ -71,9 +88,14 @@ helper_ns::error (
 }
 
 void
-helper_ns::message (
+helper_c::message (
   std::string msg
   )
 {
   std::cout << msg << "\n";
+}
+
+void
+helper_c::flip_verbose () {
+  this->verbose_flag = !this->verbose_flag;
 }
