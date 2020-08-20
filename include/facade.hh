@@ -84,7 +84,12 @@ class strategy_c {
       } else if (data->buffer.length () <= 0) {
         throw new std::length_error ("data too short");
       }
-      *json = json_c::parse (data->buffer);
+
+      try {
+        *json = json_c::parse (data->buffer);
+      } catch (...) {
+        throw new std::runtime_error ("unable to parse incoming json data - the source may be broken");
+      }
       converter (station, json);
     };
 
