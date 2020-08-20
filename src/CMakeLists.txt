@@ -56,3 +56,6 @@ add_executable (
 target_link_libraries (
   meteodata
   ${LIBS})
+
+install (TARGETS meteodata
+  DESTINATION bin)
