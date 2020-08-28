@@ -15,10 +15,10 @@
 #include "types.hh"
 #include "data.hh"
 
-#define AGENT_IDFETCHER_URI_PREFIX  "http://monitor.pogodynka.pl/api/search/?query="
+#define AGENT_IDFETCHER_URI_PREFIX  "https://hydro.imgw.pl/api/search/?query="
 #define AGENT_IDFETCHER_URI_SUFFIX  "&limit=10"
-#define AGENT_DATAFETCHER_METEO_URI "http://monitor.pogodynka.pl/api/station/meteo/?id="
-#define AGENT_DATAFETCHER_HYDRO_URI "http://monitor.pogodynka.pl/api/station/hydro/?id="
+#define AGENT_DATAFETCHER_METEO_URI "https://hydro.imgw.pl/api/station/meteo/?id="
+#define AGENT_DATAFETCHER_HYDRO_URI "https://hydro.imgw.pl/api/station/hydro/?id="
 #define AGENT_USERAGENT             "meteodata-agent/git"
 #define AGENT_TIMEOUT 10
 
