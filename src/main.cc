@@ -52,9 +52,11 @@ main (
 
   agent = agent_c::fetch_instance ();
 
-  std::vector<std::pair<command_t, std::string>>::iterator cmd_iter;
   for (auto &it: cmd_vec)
   {
+    // sanitize user input (remove all whitespaces)
+    it.second.erase (std::remove_if (it.second.begin (), it.second.end (), isspace), it.second.end ());
+
     switch (it.first) {
       case verbose:
         helper.flip_verbose ();

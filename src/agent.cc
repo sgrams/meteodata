@@ -6,6 +6,7 @@
  * See ../LICENSE for license information
  */
 #include "../include/agent.hh"
+#include <iostream>
 
 std::atomic<agent_c *> agent_c::agent_instance{nullptr};
 std::mutex             agent_c::agent_mutex;
@@ -74,19 +75,24 @@ agent_c::curl_retrieve (
   CURLcode status;
   CURL     *conn = nullptr;
 
+  // prepare curl
   conn = curl_easy_init ();
   if (conn == nullptr) {
     return -1;
   }
 
+  // set curl options
   curl_easy_setopt (conn, CURLOPT_URL, url.c_str ());
   curl_easy_setopt (conn, CURLOPT_TIMEOUT, AGENT_TIMEOUT);
   curl_easy_setopt (conn, CURLOPT_WRITEFUNCTION, curl_callback);
   curl_easy_setopt (conn, CURLOPT_WRITEDATA, buffer);
   curl_easy_setopt (conn, CURLOPT_USERAGENT, AGENT_USERAGENT);
 
-  status = curl_easy_perform (conn); // fetch data
-  curl_easy_cleanup (conn); // cleanup
+  // fetch data
+  status = curl_easy_perform (conn);
+
+  // cleanup
+  curl_easy_cleanup (conn);
 
   return (status == CURLE_OK) ? 0 : status;
 }
@@ -98,17 +104,24 @@ agent_c::idfetcher_execute (
   )
 {
   std::string url;
+  char        *name_encoded = nullptr;
 
   if (data == nullptr || name.length () <= 0) {
     return -1;
   }
 
+  // encode the name
+  name_encoded = curl_easy_escape (nullptr, name.c_str (), name.length ());
+
   // build an url
-  url = std::string (
-          AGENT_IDFETCHER_URI_PREFIX +
-          name +
-          AGENT_IDFETCHER_URI_SUFFIX
-          );
+  url.append (AGENT_IDFETCHER_URI_PREFIX);
+  url.append (name_encoded);
+  url.append (AGENT_IDFETCHER_URI_SUFFIX);
+
+  // cleanup
+  if (name_encoded) {
+    curl_free (name_encoded);
+  }
 
   return this->curl_retrieve (url, &data->buffer);
 }
@@ -128,11 +141,11 @@ agent_c::datafetcher_execute (
 
   // build an url
   if (flavour == meteo) {
-    url = std::string (AGENT_DATAFETCHER_METEO_URI);
+    url.append (AGENT_DATAFETCHER_METEO_URI);
   } else if (flavour == hydro) {
-    url = std::string (AGENT_DATAFETCHER_HYDRO_URI);
+    url.append (AGENT_DATAFETCHER_HYDRO_URI);
   }
-  url += std::to_string (id);
+  url.append (std::to_string (id));
 
   return this->curl_retrieve (url, &data->buffer);
 }
