@@ -63,28 +63,44 @@ meteo_station_c::set_data (
 measurement_temp_celsius_c
 meteo_station_c::get_cur_temp () {
   measurement_temp_celsius_c rv;
-  rv.set_value (this->temp.back().second);
+  if (this->temp.size () > 0) {
+    rv.set_value (this->temp.back().second);
+  } else {
+    throw "temperature data unavailable";
+  }
   return rv;
 }
 
 measurement_temp_kelvin_c
 meteo_station_c::get_cur_temp_kelvin () {
   measurement_temp_kelvin_c rv;
-  rv.set_value (this->temp.back().second);
+  if (this->temp.size () > 0) {
+    rv.set_value (this->temp.back().second);
+  } else {
+    throw "temperature data unavailable";
+  }
   return rv;
 }
 
 measurement_temp_fahrenheit_c
 meteo_station_c::get_cur_temp_fahrenheit () {
   measurement_temp_fahrenheit_c rv;
-  rv.set_value (this->temp.back().second);
+  if (this->temp.size () > 0) {
+    rv.set_value (this->temp.back().second);
+  } else {
+    throw "temperature data unavailable";
+  }
   return rv;
 }
 
 measurement_impl_c
 hydro_station_c::get_cur_level () {
   measurement_impl_c rv;
-  rv.set_value (this->level.back ().second);
+  if (this->level.size () > 0) {
+    rv.set_value (this->level.back ().second);
+  } else {
+    throw "level data unavailable";
+  }
   return rv;
 }
 

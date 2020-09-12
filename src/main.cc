@@ -56,6 +56,9 @@ main (
   {
     // sanitize user input (remove all whitespaces)
     it.second.erase (std::remove_if (it.second.begin (), it.second.end (), isspace), it.second.end ());
+    if (it.second.length () < 1) {
+      continue;
+    }
 
     switch (it.first) {
       case verbose:

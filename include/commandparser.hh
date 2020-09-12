@@ -13,6 +13,7 @@
 #include <vector>
 #include <utility>
 #include <string>
+#include <cstring>
 #include <unordered_map>
 #include "helper.hh"
 #include "types.hh"

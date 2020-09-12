@@ -49,7 +49,7 @@ commandparser_c::get_commands (
     return status;
   }
 
-  while ((c = getopt_long (this->argc, this->get_argv (), "hvl:d:t:", long_options, &option_index)) != -1)
+  while ((c = getopt_long (this->argc, this->get_argv (), "hvl:d::t:", long_options, &option_index)) != -1)
   {
     switch (c) {
       // help
@@ -63,8 +63,10 @@ commandparser_c::get_commands (
 
       // location
       case 'l':
-      location_provided = true;
-      command_vec.push_back (std::make_pair (location, std::string (optarg)));
+      if (strlen (optarg) > 0) {
+        location_provided = true;
+        command_vec.push_back (std::make_pair (location, std::string (optarg)));
+      }
 			break;
 
       // datetime
