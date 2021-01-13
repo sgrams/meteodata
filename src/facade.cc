@@ -42,40 +42,52 @@ station_facade_c::get_station () {
 
 void
 meteo_strategy_c::converter (station_c *station, json_c *json) {
-  // temperature parser
-  data_vec_t temp_data_vec;
+  json_c       json_tmp   = *json;
+  meteo_data_t meteo_data;
 
-  json_c json_tmp = *json;
-  json_c json_tmp_temp = json_tmp[PATH_TEMP_AUTO_REC];
-  json_c::iterator json_it;
-
-  for (json_it = json_tmp_temp.begin (); json_it < json_tmp_temp.end (); ++json_it)
+  // precipitation state parser
+  json_c json_tmp_precip = json_tmp[PATH_PRECIP_STATE];
+  for (const auto &json_it : json_tmp_precip)
   {
-    std::pair<timestamp_t, float> data;
-    //data.first  = std::chrono((*json_it)["date"].dump().c_str ());
-    data.first  = 0;
-    data.second = std::atof ((*json_it)["value"].dump ().c_str ());
-    temp_data_vec.push_back (data);
+    meteo_data.precip_state = false;
+    if (std::string (json_it.dump ()).compare (std::string ("\"no-precip\""))) {
+      meteo_data.precip_state = true;
+    }
+    break;
   }
-  ((meteo_station_c *)station)->set_data (temp_data_vec);
+
+  // temperature parser
+  json_c json_tmp_temp = json_tmp[PATH_TEMP_AUTO_REC];
+
+  for (const auto &json_it : json_tmp_temp)
+  {
+    std::pair<std::tm, float> data;
+
+    std::istringstream (json_it["date"].dump ()) >> std::get_time (&data.first, "\"%Y-%m-%dT%H:%M:%SZ\"");
+    data.second = std::atof (json_it["value"].dump ().c_str ());
+
+    meteo_data.temp.push_back (data);
+  }
+  ((meteo_station_c *)station)->set_data (meteo_data);
+
 }
 
 void
 hydro_strategy_c::converter (station_c *station, json_c *json) {
+  json_c       json_tmp = *json;
+  hydro_data_t hydro_data;
+
   // water level parser
-  data_vec_t level_data_vec;
-
-  json_c json_tmp = *json;
   json_c json_tmp_level = json_tmp[PATH_WATER_LEVEL];
-  json_c::iterator json_it;
 
-  for (json_it = json_tmp_level.begin (); json_it < json_tmp_level.end (); ++json_it)
+  for (const auto &json_it : json_tmp_level)
   {
-    std::pair<timestamp_t, float> data;
-    //data.first  = std::chrono((*json_it)["date"].dump().c_str ());
-    data.first  = 0;
-    data.second = std::atof ((*json_it)["value"].dump ().c_str ());
-    level_data_vec.push_back (data);
+    std::pair<std::tm, float> data;
+
+    std::istringstream (json_it["date"].dump ()) >> std::get_time (&data.first, "\"%Y-%m-%dT%H:%M:%SZ\"");
+    data.second = std::atof (json_it["value"].dump ().c_str ());
+
+    hydro_data.level.push_back (data);
   }
-  ((hydro_station_c *)station)->set_data (level_data_vec);
+  ((hydro_station_c *)station)->set_data (hydro_data);
 }

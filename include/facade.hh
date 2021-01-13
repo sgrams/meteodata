@@ -22,9 +22,36 @@
 
 using json_c = nlohmann::json;
 
+// meteo
+// description
+#define PATH_NAME     "name"
+#define PATH_PROVINCE "province"
+
+// precipitation
 #define PATH_PRECIP_STATE     "state"
+
+#define PATH_PRECIP_10MIN     "tenMinutesPrecipRecords"
+#define PATH_PRECIP_HOURLY    "hourlyPrecipRecords"
+#define PATH_PRECIP_DAILY     "dailyPrecipRecords"
+
+// temperature
 #define PATH_TEMP_AUTO_REC    "temperatureAutoRecords"
+#define PATH_TEMP_OBS_REC     "temperatureObsRecords"
+
+// wind velocity
+#define PATH_WIND_VEL_TEL_REC "windVelocityTelRecords"
+#define PATH_WIND_VEL_OBS_REC "windVelocityObsRecords"
+
+// wind velocity (10min max)
+#define PATH_WIND_VEL_10MIN_MAX_REC "windMaxVelocityRecords"
+
+// wind direction
+#define PATH_WIND_DIR_TEL_REC "windDirectionTelRecords"
+#define PATH_WIND_DIR_OBS_REC "windDirectionObsRecords"
+
+// hydro
 #define PATH_WATER_LEVEL      "waterStateRecords"
+#define PATH_WATER_DISCHARGE  "dischargeRecords"
 
 
 #define UNIT_PRECIPITATION       "mm"
