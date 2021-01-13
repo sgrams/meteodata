@@ -101,7 +101,7 @@ class station_c {
 
 class meteo_station_c : public station_c {
   private:
-    data_vec_t temp; // time-span = 48 hours
+    meteo_data_t meteo_data;
 
   public:
     meteo_station_c (
@@ -117,14 +117,13 @@ class meteo_station_c : public station_c {
     };
     //void  get_presentation () override; // FIXME: add presentation of the station (all data)
     void  set_data (
-      data_vec_t &temp
+      meteo_data_t &meteo_data
       );
 };
 
 class hydro_station_c : public station_c {
   private:
-    // water level
-    data_vec_t level;  // time-span = 144 hours (3 days)
+    hydro_data_t hydro_data;
 
   public:
     hydro_station_c (
@@ -140,8 +139,7 @@ class hydro_station_c : public station_c {
 
     //void  get_presentation () override; // FIXME: add presentation of the station (all data)
     void  set_data (
-      data_vec_t &level
-      //data_vec_t &discharge
+      hydro_data_t &hydro_data
       );
 };
 #endif // METEODATA_STATION_H

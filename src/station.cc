@@ -54,17 +54,17 @@ station_c::get_flavour (
 
 void
 meteo_station_c::set_data (
-  data_vec_t &temp
+  meteo_data_t &meteo_data
   )
 {
-  this->temp        = temp;
+  this->meteo_data = meteo_data;
 }
 
 measurement_temp_celsius_c
 meteo_station_c::get_cur_temp () {
   measurement_temp_celsius_c rv;
-  if (this->temp.size () > 0) {
-    rv.set_value (this->temp.back().second);
+  if (this->meteo_data.temp.size () > 0) {
+    rv.set_value (this->meteo_data.temp.back().second);
   } else {
     throw "temperature data unavailable";
   }
@@ -74,8 +74,8 @@ meteo_station_c::get_cur_temp () {
 measurement_temp_kelvin_c
 meteo_station_c::get_cur_temp_kelvin () {
   measurement_temp_kelvin_c rv;
-  if (this->temp.size () > 0) {
-    rv.set_value (this->temp.back().second);
+  if (this->meteo_data.temp.size () > 0) {
+    rv.set_value (this->meteo_data.temp.back().second);
   } else {
     throw "temperature data unavailable";
   }
@@ -85,8 +85,8 @@ meteo_station_c::get_cur_temp_kelvin () {
 measurement_temp_fahrenheit_c
 meteo_station_c::get_cur_temp_fahrenheit () {
   measurement_temp_fahrenheit_c rv;
-  if (this->temp.size () > 0) {
-    rv.set_value (this->temp.back().second);
+  if (this->meteo_data.temp.size () > 0) {
+    rv.set_value (this->meteo_data.temp.back().second);
   } else {
     throw "temperature data unavailable";
   }
@@ -96,8 +96,8 @@ meteo_station_c::get_cur_temp_fahrenheit () {
 measurement_impl_c
 hydro_station_c::get_cur_level () {
   measurement_impl_c rv;
-  if (this->level.size () > 0) {
-    rv.set_value (this->level.back ().second);
+  if (this->hydro_data.level.size () > 0) {
+    rv.set_value (this->hydro_data.level.back ().second);
   } else {
     throw "level data unavailable";
   }
@@ -106,8 +106,8 @@ hydro_station_c::get_cur_level () {
 
 void
 hydro_station_c::set_data (
-  data_vec_t &level
+  hydro_data_t &hydro_data
   )
 {
-  this->level     = level;
+  this->hydro_data = hydro_data;
 }

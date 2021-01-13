@@ -17,9 +17,7 @@ commandparser_c::commandparser_c (
 }
 
 char **
-commandparser_c::get_argv (
-  void
-  )
+commandparser_c::get_argv ()
 {
   return this->argv;
 }
@@ -93,9 +91,31 @@ commandparser_c::get_meteo_enum_map (
   std::unordered_map <std::string, meteo_datatype_t> &enum_map
   )
 {
+  enum_map["precip_10min"] = precip_10min;
+  enum_map["precip_hourly"] = precip_hourly;
+  enum_map["precip_daily"] = precip_daily;
+
   enum_map["temp"] = temp;
   enum_map["temp_kelvin"] = temp_kelvin;
   enum_map["temp_fahrenheit"] = temp_fahrenheit;
+
+  enum_map["temp_min"] = temp_min;
+  enum_map["temp_min_kelvin"] = temp_min_kelvin;
+  enum_map["temp_min_fahrenheit"] = temp_min_fahrenheit;
+
+  enum_map["temp_max"] = temp_max;
+  enum_map["temp_max_kelvin"] = temp_max_kelvin;
+  enum_map["temp_max_fahrenheit"] = temp_max_fahrenheit;
+
+  enum_map["wind_vel"] = wind_vel;
+  enum_map["wind_min_vel"] = wind_min_vel;
+  enum_map["wind_max_vel"] = wind_max_vel;
+
+  enum_map["wind_vel_10min_max"] = wind_vel_10min_max;
+  enum_map["wind_vel_min_10min_max"] = wind_vel_min_10min_max;
+  enum_map["wind_vel_max_10min_max"] = wind_vel_max_10min_max;
+
+  enum_map["wind_dir"] = wind_dir;
 }
 
 void
@@ -104,4 +124,5 @@ commandparser_c::get_hydro_enum_map (
   )
 {
   enum_map["level"] = level;
+  enum_map["discharge"] = discharge;
 }
