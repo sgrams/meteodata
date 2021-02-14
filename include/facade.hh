@@ -22,10 +22,13 @@
 
 using json_c = nlohmann::json;
 
-// meteo
+//
+// meteo paths
+//
 // description
 #define PATH_NAME     "name"
 #define PATH_PROVINCE "province"
+#define PATH_RIVER    "river"
 
 // precipitation
 #define PATH_PRECIP_STATE     "state"
@@ -49,20 +52,28 @@ using json_c = nlohmann::json;
 #define PATH_WIND_DIR_TEL_REC "windDirectionTelRecords"
 #define PATH_WIND_DIR_OBS_REC "windDirectionObsRecords"
 
-// hydro
+//
+// hydro paths
+//
 #define PATH_WATER_LEVEL      "waterStateRecords"
 #define PATH_WATER_DISCHARGE  "dischargeRecords"
 
-
+//
+// units
+//
 #define UNIT_PRECIPITATION       "mm"
 #define UNIT_TEMPERATURE_CELSIUS "°C"
 #define UNIT_WIND                "m/s"
-#define UNIT_WATER_STATE         "cm"
+#define UNIT_WATER_LEVEL         "cm"
 #define UNIT_WATER_DISCHARGE     "m³/s"
 #define UNIT_EMPTY               ""
 
+//
+// flavours
+//
 #define FLAVOUR_METEO_STRING "meteo"
 #define FLAVOUR_HYDRO_STRING "hydro"
+
 
 class strategy_c {
   protected:

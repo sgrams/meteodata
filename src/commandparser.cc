@@ -34,11 +34,12 @@ commandparser_c::get_commands (
 
   static struct option long_options[] =
   {
-    {"help",     no_argument,       0, 'h'},
-    {"verbose",  no_argument,       0, 'v'},
-    {"date",     required_argument, 0, 'd'},
-    {"location", required_argument, 0, 'l'},
-    {"type",     required_argument, 0, 't'},
+    {"help",         no_argument,       0, 'h'},
+    {"verbose",      no_argument,       0, 'v'},
+    {"presentation", no_argument,       0, 'p'},
+    {"date",         required_argument, 0, 'd'},
+    {"location",     required_argument, 0, 'l'},
+    {"type",         required_argument, 0, 't'},
     {0, 0, 0, 0},
   };
 
@@ -47,7 +48,7 @@ commandparser_c::get_commands (
     return status;
   }
 
-  while ((c = getopt_long (this->argc, this->get_argv (), "hvl:d::t:", long_options, &option_index)) != -1)
+  while ((c = getopt_long (this->argc, this->get_argv (), "hvpl:d::t:", long_options, &option_index)) != -1)
   {
     switch (c) {
       // help
@@ -66,6 +67,11 @@ commandparser_c::get_commands (
         command_vec.push_back (std::make_pair (location, std::string (optarg)));
       }
 			break;
+
+      // presentation
+      case 'p':
+      command_vec.push_back (std::make_pair (presentation, ""));
+      break;
 
       // datetime
       // TODO: add datetime selection support

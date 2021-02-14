@@ -56,9 +56,44 @@ meteo_strategy_c::converter (station_c *station, json_c *json) {
     break;
   }
 
+  // precipitation (10min) parser
+  json_c json_tmp_precip_10min = json_tmp[PATH_PRECIP_10MIN];
+  for (const auto &json_it : json_tmp_precip_10min)
+  {
+    std::pair<std::tm, float> data;
+
+    std::istringstream (json_it["date"].dump ()) >> std::get_time (&data.first, "\"%Y-%m-%dT%H:%M:%SZ\"");
+    data.second = std::atof (json_it["value"].dump ().c_str ());
+
+    meteo_data.precip_10min.push_back (data);
+  }
+
+  // precipitation (hourly) parser
+  json_c json_tmp_precip_hourly = json_tmp[PATH_PRECIP_HOURLY];
+  for (const auto &json_it : json_tmp_precip_hourly)
+  {
+    std::pair<std::tm, float> data;
+
+    std::istringstream (json_it["date"].dump ()) >> std::get_time (&data.first, "\"%Y-%m-%dT%H:%M:%SZ\"");
+    data.second = std::atof (json_it["value"].dump ().c_str ());
+
+    meteo_data.precip_hourly.push_back (data);
+  }
+
+  // precipitation (daily) parser
+  json_c json_tmp_precip_daily = json_tmp[PATH_PRECIP_DAILY];
+  for (const auto &json_it : json_tmp_precip_daily)
+  {
+    std::pair<std::tm, float> data;
+
+    std::istringstream (json_it["date"].dump ()) >> std::get_time (&data.first, "\"%Y-%m-%dT%H:%M:%SZ\"");
+    data.second = std::atof (json_it["value"].dump ().c_str ());
+
+    meteo_data.precip_daily.push_back (data);
+  }
+
   // temperature parser
   json_c json_tmp_temp = json_tmp[PATH_TEMP_AUTO_REC];
-
   for (const auto &json_it : json_tmp_temp)
   {
     std::pair<std::tm, float> data;
@@ -68,8 +103,45 @@ meteo_strategy_c::converter (station_c *station, json_c *json) {
 
     meteo_data.temp.push_back (data);
   }
-  ((meteo_station_c *)station)->set_data (meteo_data);
 
+  // wind velocity
+  json_c json_tmp_wind_vel = json_tmp[PATH_WIND_VEL_TEL_REC];
+  for (const auto &json_it : json_tmp_wind_vel)
+  {
+    std::pair<std::tm, float> data;
+
+    std::istringstream (json_it["date"].dump ()) >> std::get_time (&data.first, "\"%Y-%m-%dT%H:%M:%SZ\"");
+    data.second = std::atof (json_it["value"].dump ().c_str ());
+
+    meteo_data.wind_vel.push_back (data);
+  }
+
+  // wind velocity (10min)
+  json_c json_tmp_wind_vel_10min = json_tmp[PATH_WIND_VEL_10MIN_MAX_REC];
+  for (const auto &json_it : json_tmp_wind_vel_10min)
+  {
+    std::pair<std::tm, float> data;
+
+    std::istringstream (json_it["date"].dump ()) >> std::get_time (&data.first, "\"%Y-%m-%dT%H:%M:%SZ\"");
+    data.second = std::atof (json_it["value"].dump ().c_str ());
+
+    meteo_data.wind_vel_10min.push_back (data);
+  }
+
+  // wind direction
+  json_c json_tmp_wind_dir = json_tmp[PATH_WIND_DIR_TEL_REC];
+  for (const auto &json_it : json_tmp_wind_dir)
+  {
+    std::pair<std::tm, float> data;
+
+    std::istringstream (json_it["date"].dump ()) >> std::get_time (&data.first, "\"%Y-%m-%dT%H:%M:%SZ\"");
+    data.second = std::atof (json_it["value"].dump ().c_str ());
+
+    meteo_data.wind_dir.push_back (data);
+  }
+
+  // save parsed data
+  ((meteo_station_c *)station)->set_data (meteo_data);
 }
 
 void
@@ -89,5 +161,20 @@ hydro_strategy_c::converter (station_c *station, json_c *json) {
 
     hydro_data.level.push_back (data);
   }
+
+  // discharge level parser
+  json_c json_tmp_discharge = json_tmp[PATH_WATER_DISCHARGE];
+
+  for (const auto &json_it : json_tmp_discharge)
+  {
+    std::pair<std::tm, float> data;
+
+    std::istringstream (json_it["date"].dump ()) >> std::get_time (&data.first, "\"%Y-%m-%dT%H:%M:%SZ\"");
+    data.second = std::atof (json_it["value"].dump ().c_str ());
+
+    hydro_data.discharge.push_back (data);
+  }
+
+  // save parsed data
   ((hydro_station_c *)station)->set_data (hydro_data);
 }

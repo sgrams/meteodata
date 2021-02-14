@@ -27,6 +27,46 @@ station_c::set_name (
   return;
 }
 
+std::string
+station_c::get_province (
+  )
+{
+  return this->province;
+}
+
+void
+station_c::set_province (
+  std::string province
+  )
+{
+  if (province.empty ()) {
+    throw std::invalid_argument ("province was set incorrectly");
+    return;
+  }
+  this->province = province;
+  return;
+}
+
+std::string
+station_c::get_river (
+  )
+{
+  return this->river;
+}
+
+void
+station_c::set_river (
+  std::string river
+  )
+{
+  if (river.empty ()) {
+    throw std::invalid_argument ("river was set incorrectly");
+    return;
+  }
+  this->river = river;
+  return;
+}
+
 uint64_t
 station_c::get_number (
   )
@@ -51,6 +91,13 @@ station_c::get_flavour (
   return this->flavour;
 }
 
+
+std::string
+meteo_station_c::get_presentation (
+  )
+{
+  return std::string ("meteo presentation!");
+}
 
 void
 meteo_station_c::set_data (
@@ -93,15 +140,33 @@ meteo_station_c::get_cur_temp_fahrenheit () {
   return rv;
 }
 
-measurement_impl_c
+measurement_level_c
 hydro_station_c::get_cur_level () {
-  measurement_impl_c rv;
+  measurement_level_c rv;
   if (this->hydro_data.level.size () > 0) {
     rv.set_value (this->hydro_data.level.back ().second);
   } else {
     throw "level data unavailable";
   }
   return rv;
+}
+
+measurement_discharge_c
+hydro_station_c::get_cur_discharge () {
+  measurement_discharge_c rv;
+  if (this->hydro_data.discharge.size () > 0) {
+    rv.set_value (this->hydro_data.discharge.back ().second);
+  } else {
+    throw "discharge data unavailable";
+  }
+  return rv;
+}
+
+std::string
+hydro_station_c::get_presentation (
+  )
+{
+  return std::string ("hydro presentation!");
 }
 
 void

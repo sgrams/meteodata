@@ -12,10 +12,11 @@
 #include <algorithm>
 
 typedef enum command {
-  verbose  = 0x01,
-  location = 0x02,
-  date     = 0x03,
-  type     = 0x04,
+  verbose      = 0x01,
+  location     = 0x02,
+  presentation = 0x03,
+  date         = 0x04,
+  type         = 0x05,
 } command_t;
 
 typedef enum flavour {

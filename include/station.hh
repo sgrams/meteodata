@@ -72,15 +72,41 @@ class measurement_temp_kelvin_c : public measurement_c {
     };
 };
 
+class measurement_level_c : public measurement_c {
+  public:
+    std::string to_string () const override {
+      std::stringstream stream;
+      stream << std::fixed << std::setprecision (2) << this->get_value ();
+      return stream.str () + " cm";
+    };
+};
+
+class measurement_discharge_c : public measurement_c {
+  public:
+    std::string to_string () const override {
+      std::stringstream stream;
+      stream << std::fixed << std::setprecision (2) << this->get_value ();
+      return stream.str () + " m³/s";
+    };
+};
+
 class station_c {
   protected:
     std::string             name;
+    std::string             province;
+    std::string             river;
     uint64_t                number = 0;
     flavour_t               flavour;
 
   public:
     std::string  get_name ();
     void         set_name (std::string name);
+
+    std::string  get_province ();
+    void         set_province (std::string province);
+
+    std::string  get_river ();
+    void         set_river (std::string river);
 
     uint64_t     get_number ();
     void         set_number (uint64_t number);
@@ -95,8 +121,8 @@ class station_c {
     virtual ~station_c () {};
 
     // common interface
-    virtual station_c *clone () const = 0;
-    //virtual void get_presentation () = 0; // FIXME: add presentation of the station (all data)
+    virtual station_c   *clone () const = 0;
+    virtual std::string get_presentation () = 0;
 };
 
 class meteo_station_c : public station_c {
@@ -115,7 +141,7 @@ class meteo_station_c : public station_c {
     station_c *clone () const override {
       return new meteo_station_c (*this);
     };
-    //void  get_presentation () override; // FIXME: add presentation of the station (all data)
+    std::string get_presentation () override;
     void  set_data (
       meteo_data_t &meteo_data
       );
@@ -131,13 +157,14 @@ class hydro_station_c : public station_c {
     {};
     ~hydro_station_c () {};
 
-    measurement_impl_c get_cur_level ();
+    measurement_level_c     get_cur_level ();
+    measurement_discharge_c get_cur_discharge ();
 
     station_c *clone () const override {
       return new hydro_station_c (*this);
     };
 
-    //void  get_presentation () override; // FIXME: add presentation of the station (all data)
+    std::string get_presentation () override;
     void  set_data (
       hydro_data_t &hydro_data
       );
