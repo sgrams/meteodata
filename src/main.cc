@@ -71,6 +71,14 @@ handle_meteo_datatypes (
       meteo_station_c *station = (meteo_station_c *)sf->get_station();
 
       switch (datatype) {
+        case precip_state:
+          break;
+        case precip_10min:
+          break;
+        case precip_hourly:
+          break;
+        case precip_daily:
+          break;
         case temp:
           helper.message (station->get_cur_temp ().to_string ());
           break;
@@ -79,6 +87,32 @@ handle_meteo_datatypes (
           break;
         case temp_fahrenheit:
           helper.message (station->get_cur_temp_fahrenheit ().to_string ());
+          break;
+        case temp_min:
+          break;
+        case temp_min_kelvin:
+          break;
+        case temp_min_fahrenheit:
+          break;
+        case temp_max:
+          break;
+        case temp_max_kelvin:
+          break;
+        case temp_max_fahrenheit:
+          break;
+        case wind_vel:
+          break;
+        case wind_min_vel:
+          break;
+        case wind_max_vel:
+          break;
+        case wind_vel_10min_max:
+          break;
+        case wind_vel_min_10min_max:
+          break;
+        case wind_vel_max_10min_max:
+          break;
+        case wind_dir:
           break;
       }
     }
@@ -166,6 +200,7 @@ void
 handle_presentation (
   )
 {
+  /*
   meteo_sf = new station_facade_c (agent, nullptr, nullptr, meteo);
   hydro_sf = new station_facade_c (agent, nullptr, nullptr, hydro);
 
@@ -212,7 +247,8 @@ handle_presentation (
     );
 
   // Step 4. Present all data found for HYDRO station
-
+*/
+  return;
 }
 
 int
@@ -294,9 +330,6 @@ main (
     helper.error ("no datatype provided!");
   }
 
-  return 0;
-
-  station_facade_c *sf = nullptr;
   for (auto sep = location_vec.size (); auto &location: location_vec)
   {
     if (!presentation_issued) {
